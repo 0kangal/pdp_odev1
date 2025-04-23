@@ -6,16 +6,26 @@ import lombok.Getter;
 public class Kisi {
 	private String isim;
 	private int yas;
-	private  int kalan_omur;
-	private char bulundugu_uzay_aracı_adi;
+	private  int kalan_omur; //hour
+	private UzayAraci bulunduguUzayAraci;
 	private boolean yasiyormu;
 	
 	
-	public Kisi(String isim, int yas, int kalan_omur, char bulundugu_uzay_aracı_adi) {
+	public Kisi(String isim, int yas, int kalan_omur, UzayAraci bulunduguUzayAraci) {
 		this.isim = isim;
 		this.yas = yas;
 		this.kalan_omur = kalan_omur;
-		this.bulundugu_uzay_aracı_adi = bulundugu_uzay_aracı_adi;
+		this.bulunduguUzayAraci = bulunduguUzayAraci;
 		this.yasiyormu = true;
 	}
+	
+	public void saatIlerle() {
+        if (yasiyormu) {
+            kalan_omur--;
+            if (kalan_omur <= 0) {
+                yasiyormu = false;
+            }
+        }
+    }
 }
+

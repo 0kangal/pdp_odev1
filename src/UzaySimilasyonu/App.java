@@ -1,8 +1,9 @@
 package UzaySimilasyonu;
 
-public class Similasyon {
+public class App {
 
 	public static void main(String[] args) {
+		// TODO Auto-generated method stub
 
 	}
 
