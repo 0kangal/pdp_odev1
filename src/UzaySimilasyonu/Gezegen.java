@@ -1,7 +1,5 @@
 package UzaySimilasyonu;
-import lombok.Getter;
 
-@Getter
 public class Gezegen {
 
 	private String gezegen_adi;
@@ -25,6 +23,20 @@ public class Gezegen {
             saat_sayaci = 0;
         }
     }
-	
-}
+	public void nufusuSifirla() {
+	    this.nufus = 0;
+	}
 
+	public void nufusuArtir() {
+	    this.nufus++;
+	}
+	
+	public int getToplamSaat() { return gezegendeki_tarih.toplamGunSayisi()*gunun_kac_saat_oldugu; }
+
+	public String getGezegen_adi() { return gezegen_adi; }
+	public int getGunun_kac_saat_oldugu() { return gunun_kac_saat_oldugu; }
+	public Zaman getGezegendeki_tarih() { return new Zaman(gezegendeki_tarih); }
+	public int getNufus() { return nufus; }
+	public int getSaat_sayaci() { return saat_sayaci;}
+
+}
