@@ -26,8 +26,8 @@ public class UzayAraci {
         this.cikisGezegeni = cikis;
         this.varisGezegeni = varis;
         this.cikisTarihi = cikisTarihi;
-        this.varisTarihi = HesaplaVarisTarihi();
         this.mesafeSaat = mesafeSaat;
+        this.varisTarihi = HesaplaVarisTarihi();
         this.durum = Durum.Bekliyor;
         this.yolcular = new ArrayList<>();
     }
@@ -42,9 +42,33 @@ public class UzayAraci {
     	for(Kisi yolcu: yolcular) {
     		yolcu.saatIlerle();
     	}
-    	durumKontrol();
     	
     	if(durum == Durum.Yolda && mesafeSaat > 0) { mesafeSaat--; }
+    	
+    	durumKontrol();
+    	
+    }
+
+    private void durumKontrol() {
+        if (durum == Durum.IMHA) return;
+
+        if (!YasayanVarMi()) {
+            durum = Durum.IMHA;
+            return;
+        }
+
+        if (this.mesafeSaat == 0) {
+            durum = Durum.Vardi;
+            return;
+        }
+
+        Zaman gezegenTarihi = cikisGezegeni.getGezegendeki_tarih();
+
+        if (gezegenTarihi.smaller(cikisTarihi)) {
+            durum = Durum.Bekliyor;
+        } else {
+            durum = Durum.Yolda;
+        }
     }
     
     public void nufusaEkle() {
@@ -66,28 +90,6 @@ public class UzayAraci {
             }
         }
     }
-
-    private void durumKontrol() {
-        if (durum == Durum.Vardi || durum == Durum.IMHA) return;
-
-        if (!YasayanVarMi()) {
-            durum = Durum.IMHA;
-            return;
-        }
-
-        if (this.mesafeSaat == 0) {
-            durum = Durum.Vardi;
-            return;
-        }
-
-        Zaman gezegenTarihi = cikisGezegeni.getGezegendeki_tarih();
-
-        if (cikisTarihi.smaller(gezegenTarihi)) {
-            durum = Durum.Bekliyor;
-        } else {
-            durum = Durum.Yolda;
-        }
-    }
     
     private boolean YasayanVarMi() {
 		for (Kisi yolcu : yolcular) {
@@ -99,16 +101,19 @@ public class UzayAraci {
 	}
     
     private Zaman HesaplaVarisTarihi() {
-    	int varisa_kac_saat_var = ((cikisTarihi.toplamGunSayisi() - cikisGezegeni.getGezegendeki_tarih().toplamGunSayisi())
-    			* cikisGezegeni.getGunun_kac_saat_oldugu()) 
-    			+ mesafeSaat;
-    	int gun_sayisi = varisa_kac_saat_var/varisGezegeni.getGunun_kac_saat_oldugu();
-    	Zaman tarih = varisGezegeni.getGezegendeki_tarih();
+    	int beklemeGunFarki = cikisGezegeni.getGezegendeki_tarih().gunFarki(cikisTarihi);
+    	int beklemeSaat = beklemeGunFarki * cikisGezegeni.getGunun_kac_saat_oldugu();
+    	int toplamSaat = beklemeSaat + mesafeSaat;
     	
-    	for(int i = 0; i < gun_sayisi; i++) {
-    		tarih.birGunIlerle();
-    	}
-    	return tarih;
+    	int gunSayisi = toplamSaat/varisGezegeni.getGunun_kac_saat_oldugu();
+    	
+    	Zaman varis = new Zaman(varisGezegeni.getGezegendeki_tarih());
+    	
+    	for (int i = 0; i < gunSayisi; i++) {
+            varis.birGunIlerle();
+        }
+
+        return varis;
     	
     }
 
@@ -123,3 +128,5 @@ public class UzayAraci {
     public List<Kisi> getYolcular() { return yolcular; }
     
 }
+
+

@@ -33,10 +33,12 @@ public class Gezegen {
 	
 	public int getToplamSaat() { return gezegendeki_tarih.toplamGunSayisi()*gunun_kac_saat_oldugu; }
 
+	// Getter'lar
 	public String getGezegen_adi() { return gezegen_adi; }
 	public int getGunun_kac_saat_oldugu() { return gunun_kac_saat_oldugu; }
-	public Zaman getGezegendeki_tarih() { return new Zaman(gezegendeki_tarih); }
+	public Zaman getGezegendeki_tarih() { return new Zaman(this.gezegendeki_tarih); }
 	public int getNufus() { return nufus; }
 	public int getSaat_sayaci() { return saat_sayaci;}
 
 }
+

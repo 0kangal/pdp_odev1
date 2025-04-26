@@ -31,3 +31,4 @@ public class Kisi {
     public UzayAraci getBulunduguUzayAraci() { return bulunduguUzayAraci; }
     public boolean isYasiyor() { return yasiyor; }
 }
+

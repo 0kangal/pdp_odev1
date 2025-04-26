@@ -1,8 +1,5 @@
 package UzaySimilasyonu;
 
-import lombok.Getter;
-
-@Getter
 public class Zaman {
     private int yil;
     private int ay;
@@ -33,14 +30,7 @@ public class Zaman {
         }
     }
     
-    public int toplamGunSayisi() {
-    	
-        int toplamGun = yil * 365;
-        toplamGun += (ay - 1) * 30;
-        toplamGun += gun;
-        
-        return toplamGun;
-    }
+    
     
     @Override
     public String toString() {
@@ -58,6 +48,19 @@ public class Zaman {
             }
         }
         return false;
+    }
+    
+    public int gunFarki(Zaman other) {
+        return Math.abs(this.toplamGunSayisi() - other.toplamGunSayisi());
+    }
+    
+    public int toplamGunSayisi() {
+    	
+        int toplamGun = yil * 365;
+        toplamGun += (ay - 1) * 30;
+        toplamGun += gun;
+        
+        return toplamGun;
     }
     
 }
