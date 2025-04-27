@@ -3,6 +3,8 @@ package UzaySimilasyonu;
 import java.util.ArrayList;
 import java.util.List;
 
+import Utility.Zaman;
+
 public class UzayAraci {
 
     public enum Durum {

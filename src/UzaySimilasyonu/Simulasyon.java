@@ -2,36 +2,23 @@ package UzaySimilasyonu;
 
 import java.util.*;
 
-public class Simulasyon {
+public abstract class Simulasyon {
 	
 	public static void simulasyonBaslat(Collection<Gezegen> gezegenler, List<UzayAraci> araclar) {
         boolean tamamlandi = false;
 
         while (!tamamlandi) {
         	
-
-            // 3. Nüfusları yeniden hesapla
             nufuslariHesapla(gezegenler, araclar);
-
-            // 4. Ekranı güncelle (her saat)
+            
             ekraniGuncelle(gezegenler, araclar);
             
-            // 1. Gezegenlerin saati ilerlesin
-            for (Gezegen g : gezegenler) {
-                g.saatIlerle();
-            }
+            for (Gezegen g : gezegenler) { g.saatIlerle(); }
 
-            // 2. Uzay araçları ilerlesin (içinde kişileri de ilerletiyor)
-            for (UzayAraci u : araclar) {
-                u.saatIlerle();
-            }
+            for (UzayAraci u : araclar) { u.saatIlerle(); }
 
-            // 5. Tüm araçlar "Vardi" ya da "IMHA" olduysa döngüyü bitir
-            tamamlandi = araclar.stream().allMatch(a ->
-                a.getDurum() == UzayAraci.Durum.Vardi || a.getDurum() == UzayAraci.Durum.IMHA
-            );
+            tamamlandi = araclar.stream().allMatch(a ->a.getDurum() == UzayAraci.Durum.Vardi || a.getDurum() == UzayAraci.Durum.IMHA);
 
-            // 6. 0.5 saniye beklet (görsel takip için)
             try {
                 Thread.sleep(0);
             } catch (InterruptedException e) {
@@ -41,15 +28,18 @@ public class Simulasyon {
 
         // Simülasyon bittiğinde final ekranı
         nufuslariHesapla(gezegenler, araclar);
+        clearConsole();
         ekraniGuncelle(gezegenler, araclar);
         System.out.println("\n--- Simülasyon Tamamlandı ---");
     }
 	
-	public static void ekraniGuncelle(Collection<Gezegen> gezegenler, List<UzayAraci> araclar) {
-	    System.out.print("\033[H\033[2J"); // Konsol temizleme
-	    System.out.flush();
+	private static void ekraniGuncelle(Collection<Gezegen> gezegenler, List<UzayAraci> araclar) {
+	    clearConsole();
 
 	    List<Gezegen> gezegenList = new ArrayList<>(gezegenler);
+
+	    // Sort gezegenList alphabetically by Gezegen_adi
+	    gezegenList.sort(Comparator.comparing(Gezegen::getGezegen_adi));
 
 	    System.out.println("\nGezegenler:");
 
@@ -60,26 +50,26 @@ public class Simulasyon {
 	    }
 	    System.out.println();
 
-	    // Tarihler satırı
+	    // Tarihler satırı (using 12-character width for dates)
 	    System.out.printf("%-15s", "Tarih");
 	    for (Gezegen g : gezegenList) {
-	        System.out.printf("%-15s", g.getGezegendeki_tarih());
+	        String dateStr = g.getGezegendeki_tarih().toString();
+	        // Limit date to 12 characters width
+	        System.out.printf("%-15s", String.format("%-15s", dateStr));
 	    }
 	    System.out.println();
 
-	    // Nüfuslar satırı (ortalı yazmak için)
-	    System.out.printf("%-12s", "Nüfus");
+	    // Nüfuslar satırı (using 10-character width for population)
+	    System.out.printf("%-15s", "Nüfus");
 	    for (Gezegen g : gezegenList) {
 	        String nufusStr = String.valueOf(g.getNufus());
-	        int totalWidth = 15;
-	        int padding = (totalWidth - nufusStr.length()) / 2;
-	        String format = "%" + (padding + nufusStr.length()) + "s";
-	        System.out.printf(format + "%-" + (totalWidth - (padding + nufusStr.length())) + "s", nufusStr, "");
+	        // Keep population within 10 characters width
+	        System.out.printf("%-15s", String.format("%-15s", nufusStr));
 	    }
 	    System.out.println("\n");
 
 	    System.out.println("Uzay Araçları:");
-	    System.out.printf("%-10s %-10s %-10s %-10s %-20s %-20s%n", "Araç Adı", "Durum", "Çıkış", "Varış", "Hedefe Kalan Saat", "Hedefe Varacağı Tarih");
+	    System.out.printf("%-15s %-15s %-15s %-15s %-25s %-25s%n", "Araç Adı", "Durum", "Çıkış", "Varış", "Hedefe Kalan Saat", "Hedefe Varacağı Tarih");
 
 	    for (UzayAraci a : araclar) {
 	        String ad = a.getAd();
@@ -89,15 +79,29 @@ public class Simulasyon {
 	        String kalanSaat = durum.equalsIgnoreCase("İmha") ? "--" : String.valueOf(a.getMesafeSaat());
 	        String varisTarihi = durum.equalsIgnoreCase("İmha") ? "--" : a.getVarisTarihi().toString();
 
-	        System.out.printf("%-10s %-10s %-10s %-10s %-20s %-20s%n", ad, durum, cikis, varis, kalanSaat, varisTarihi);
+	        System.out.printf("%-15s %-15s %-15s %-15s %-25s %-25s%n", ad, durum, cikis, varis, kalanSaat, varisTarihi);
 	    }
-
-	    
 	}
 
 
+
+
+
+	private static void clearConsole() {
+	    try {
+	        String os = System.getProperty("os.name").toLowerCase();
+
+	        if (os.contains("win")) {
+	            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+	        } else {
+	            new ProcessBuilder("clear").inheritIO().start().waitFor();
+	        }
+	    } catch (Exception e) {
+	    	
+	        }
+	    }
 	
-	public static void nufuslariHesapla(Collection<Gezegen> gezegenler, List<UzayAraci> araclar) {
+	private  static void nufuslariHesapla(Collection<Gezegen> gezegenler, List<UzayAraci> araclar) {
 		
         for (Gezegen gezegen : gezegenler) {
             gezegen.nufusuSifirla();

@@ -1,5 +1,7 @@
 package UzaySimilasyonu;
 
+import Utility.Zaman;
+
 public class Gezegen {
 
 	private String gezegen_adi;
@@ -16,6 +18,7 @@ public class Gezegen {
 		this.saat_sayaci = 0;
 	}
 	
+	// Her saat ilerlediğinde çağrılır, gün tamamlandığında tarihi bir gün ilerletir
 	public void saatIlerle() {
         saat_sayaci++;
         if (saat_sayaci >= gunun_kac_saat_oldugu) {
@@ -23,6 +26,7 @@ public class Gezegen {
             saat_sayaci = 0;
         }
     }
+	
 	public void nufusuSifirla() {
 	    this.nufus = 0;
 	}
@@ -31,6 +35,7 @@ public class Gezegen {
 	    this.nufus++;
 	}
 	
+	// Toplam geçen saati hesaplar
 	public int getToplamSaat() { return gezegendeki_tarih.toplamGunSayisi()*gunun_kac_saat_oldugu; }
 
 	// Getter'lar

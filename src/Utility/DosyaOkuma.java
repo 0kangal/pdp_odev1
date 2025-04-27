@@ -1,16 +1,20 @@
-package UzaySimilasyonu;
+package Utility;
 
 import java.io.*;
 import java.util.*;
-import java.nio.file.*;
+import java.nio.charset.StandardCharsets;
 
-public class DosyaOkuma {
+import UzaySimilasyonu.Gezegen;
+import UzaySimilasyonu.Kisi;
+import UzaySimilasyonu.UzayAraci;
+
+public abstract class DosyaOkuma {
 	
-	public static List<Kisi> kisileriOku(String dosyaYolu, Map<String, UzayAraci> uzayAraciMap) {
+	public static List<Kisi> kisileriOku(InputStream inputStream, Map<String, UzayAraci> uzayAraciMap) {
 	    List<Kisi> kisiler = new ArrayList<>();
-	    try {
-	        List<String> satirlar = Files.readAllLines(Paths.get(dosyaYolu));
-	        for (String satir : satirlar) {
+	    try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+	        String satir;
+	        while ((satir = reader.readLine()) != null) {
 	            String[] parcalar = satir.split("#");
 	            String isim = parcalar[0];
 	            int yas = Integer.parseInt(parcalar[1]);
@@ -33,11 +37,11 @@ public class DosyaOkuma {
 	}
 
 
-    public static List<UzayAraci> araclariOku(String dosyaYolu, Map<String, Gezegen> gezegenMap) {
+    public static List<UzayAraci> araclariOku(InputStream inputStream, Map<String, Gezegen> gezegenMap) {
         List<UzayAraci> araclar = new ArrayList<>();
-        try {
-            List<String> satirlar = Files.readAllLines(Paths.get(dosyaYolu));
-            for (String satir : satirlar) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            String satir;
+            while ((satir = reader.readLine()) != null) {
                 String[] parcalar = satir.split("#");
                 String adi = parcalar[0];
                 Gezegen cikis = gezegenMap.get(parcalar[1]);
@@ -60,11 +64,11 @@ public class DosyaOkuma {
         return araclar;
     }
 
-    public static Map<String, Gezegen> gezegenleriOku(String dosyaYolu) {
+    public static Map<String, Gezegen> gezegenleriOku(InputStream inputStream) {
         Map<String, Gezegen> gezegenler = new HashMap<>();
-        try {
-            List<String> satirlar = Files.readAllLines(Paths.get(dosyaYolu));
-            for (String satir : satirlar) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            String satir;
+            while ((satir = reader.readLine()) != null) {
                 String[] parcalar = satir.split("#");
                 String adi = parcalar[0];
                 int saat = Integer.parseInt(parcalar[1]);
@@ -84,5 +88,3 @@ public class DosyaOkuma {
         return gezegenler;
     }
 }
-
-

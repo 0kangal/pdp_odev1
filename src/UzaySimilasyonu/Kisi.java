@@ -3,9 +3,9 @@ package UzaySimilasyonu;
 public class Kisi {
     private String isim;
     private int yas;
-    private int kalanOmur; // saat cinsinden
+    private int kalanOmur; // Saat cinsinden
     private UzayAraci bulunduguUzayAraci;
-    private boolean yasiyor;
+    private boolean yasiyor; // Kişi hayatta mı?
 
     public Kisi(String isim, int yas, int kalanOmur, UzayAraci bulunduguUzayAraci) {
         this.isim = isim;
@@ -14,12 +14,13 @@ public class Kisi {
         this.bulunduguUzayAraci = bulunduguUzayAraci;
         this.yasiyor = true;
     }
-
+    
+    // Kalan ömrü bir saat azaltır
     public void saatIlerle() {
         if (yasiyor) {
             kalanOmur--;
             if (kalanOmur <= 0) {
-                yasiyor = false;
+                yasiyor = false; // Kişi öldü
             }
         }
     }

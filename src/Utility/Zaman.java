@@ -1,4 +1,4 @@
-package UzaySimilasyonu;
+package Utility;
 
 public class Zaman {
     private int yil;
@@ -11,13 +11,14 @@ public class Zaman {
         this.yil = yil;
     }
     
-    
+    // Kopya yapıcı metod: Bir diğer Zaman objesini kopyalar	
     public Zaman(Zaman other) {
         this.gun = other.gun;
         this.ay = other.ay;
         this.yil = other.yil;
     }
-
+    
+    // Bir gün ilerletir: Gün değeri 30'u geçerse ayı, ay değeri 12'yi geçerse yılı bir artırır
     public void birGunIlerle() {
         gun++;
         if (gun > 30) {
@@ -30,13 +31,12 @@ public class Zaman {
         }
     }
     
-    
-    
     @Override
     public String toString() {
         return gun + "." + ay + "." + yil;
     }
     
+    // Diğer bir Zaman objesi ile karşılaştırarak bu zamanın daha küçük olup olmadığını kontrol eder
     public boolean smaller(Zaman other) {
     	if (this.yil < other.yil) {
             return true;
@@ -50,10 +50,12 @@ public class Zaman {
         return false;
     }
     
+    // Bu zaman ile diğer zaman arasındaki gün farkını döndürür
     public int gunFarki(Zaman other) {
         return Math.abs(this.toplamGunSayisi() - other.toplamGunSayisi());
     }
     
+    // Zamanı gün cinsinden toplamaya yarar: yıl * 365 + ay * 30 + gün
     public int toplamGunSayisi() {
     	
         int toplamGun = yil * 365;
